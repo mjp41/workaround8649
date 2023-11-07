@@ -1,0 +1,18 @@
+name: 'runner-images/issues/8659'
+description: '# Work around https://github.com/actions/runner-images/issues/8659'
+inputs:
+  os:
+    description: 'Runner OS'
+    required: false
+    default: 'default'
+runs:
+  using: "composite"
+  steps:
+    - name: "[Ubuntu] Remove GCC 13 from runner image"
+      if: (inputs.os == 'ubuntu-latest') || (inputs.os == 'ubuntu-22.04') || (inputs.os == 'default')
+      shell: bash
+      run: |
+        echo "Runs on: ${{ inputs.os }}"
+        sudo rm -f /etc/apt/sources.list.d/ubuntu-toolchain-r-ubuntu-test-jammy.list
+        sudo apt-get update
+        sudo apt-get install -y --allow-downgrades libc6=2.35-0ubuntu3.4 libc6-dev=2.35-0ubuntu3.4 libstdc++6=12.3.0-1ubuntu1~22.04 libgcc-s1=12.3.0-1ubuntu1~22.04
