@@ -1,0 +1,28 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Compile
+      run: clang++ test.cpp -std=gnu++20
+
+  build-workaround:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: ./
+
+    - name: Compile
+      run: clang++ test.cpp -std=gnu++20
